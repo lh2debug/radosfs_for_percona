@@ -1,0 +1,11 @@
+/usr/lib64/libradosfs.so
+/usr/include/radosfs/Filesystem.hh
+/usr/include/radosfs/Dir.hh
+/usr/include/radosfs/File.hh
+/usr/include/radosfs/FsObj.hh
+/usr/include/radosfs/FileInode.hh
+/usr/include/radosfs/Quota.hh
+/usr/include/libradosfs.hh
+/etc/libradosfs/loglevel
+/usr/lib64/python2.6/site-packages/libradosfspy.so
+/usr/lib64/python2.6/site-packages/radosfs.py

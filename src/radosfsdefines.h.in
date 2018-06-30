@@ -1,0 +1,113 @@
+/*
+ * Rados Filesystem - A filesystem library based in librados
+ *
+ * Copyright (C) 2014-2015 CERN, Switzerland
+ *
+ * Author: Joaquim Rocha <joaquim.rocha@cern.ch>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License at http://www.gnu.org/licenses/lgpl-3.0.txt
+ * for more details.
+ */
+
+#ifndef __RADOS_FS_DEFINES_HH__
+#define __RADOS_FS_DEFINES_HH__
+
+#define RADOS_FS_BEGIN_NAMESPACE namespace radosfs {
+#define RADOS_FS_END_NAMESPACE }
+
+#define ROOT_UID 0
+#define NOBODY_UID 99
+#define PATH_SEP '/'
+#define XATTR_SYS_PREFIX "sys."
+#define XATTR_USER_PREFIX "usr."
+#define XATTR_RADOSFS_PREFIX "rfs."
+#define UID_KEY "uid"
+#define GID_KEY "gid"
+#define MODE_KEY "mode"
+#define POOL_KEY "pool"
+#define XATTR_LAST_CHUNK_SIZE XATTR_RADOSFS_PREFIX "chunk-size"
+#define XATTR_SIZE_LENGTH 24
+#define LINK_KEY "link"
+#define XATTR_PERMISSIONS_LENGTH 50
+#define XATTR_PERMISSIONS XATTR_RADOSFS_PREFIX "permissions"
+#define XATTR_LINK_LENGTH 1024
+#define XATTR_FILE_PREFIX XATTR_RADOSFS_PREFIX "file."
+#define XATTR_FILE_LENGTH 1000
+#define TIME_KEY "time"
+#define XATTR_CTIME XATTR_RADOSFS_PREFIX "ctime"
+#define XATTR_MTIME XATTR_RADOSFS_PREFIX "mtime"
+#define XATTR_TMID XATTR_RADOSFS_PREFIX "tmid"
+#define XATTR_USE_TMID XATTR_RADOSFS_PREFIX "use-tmid"
+#define XATTR_TIME_LENGTH 50
+#define XATTR_INODE XATTR_RADOSFS_PREFIX "inode"
+#define XATTR_INODE_HARD_LINK XATTR_RADOSFS_PREFIX "backlink"
+#define XATTR_FILE_CHUNK_SIZE XATTR_RADOSFS_PREFIX "chunk"
+#define DEFAULT_MODE (S_IRWXU | S_IRGRP | S_IROTH)
+#define DEFAULT_MODE_FILE (S_IFREG | DEFAULT_MODE)
+#define DEFAULT_MODE_LINK (S_IFLNK | DEFAULT_MODE)
+#define DEFAULT_MODE_DIR (S_IFDIR | DEFAULT_MODE)
+#define INDEX_NAME_KEY "name"
+#define MEGABYTE_CONVERSION (1024 * 1024) // 1MB
+#define DEFAULT_DIR_CACHE_MAX_SIZE 1000000
+#define DEFAULT_DIR_CACHE_CLEAN_PERCENTAGE .2
+#define DIR_LOG_UPDATED "updated"
+#define DIR_LOG_UPDATED_FALSE "false"
+#define DIR_LOG_UPDATED_TRUE "true"
+#define DEFAULT_DIR_COMPACT_RATIO .2
+#define INDEX_METADATA_PREFIX "md"
+#define LOG_LEVEL_CONF_FILE "${LOG_LEVEL_FILE}"
+#define DEFAULT_NUM_FINDER_THREADS 100
+#define FINDER_KEY_NAME "name"
+#define FINDER_KEY_INAME "iname"
+#define FINDER_KEY_SIZE "size"
+#define FINDER_KEY_UID "uid"
+#define FINDER_KEY_GID "gid"
+#define FINDER_KEY_MTD "mtd"
+#define FINDER_KEY_IMTD "imtd"
+#define FINDER_KEY_MTD_NUM FINDER_KEY_MTD "N"
+#define FINDER_KEY_XATTR "xattr"
+#define FINDER_KEY_XATTR_NUM FINDER_KEY_XATTR "N"
+#define FINDER_KEY_IXATTR "ixattr"
+#define FINDER_EQ_SYM "="
+#define FINDER_NE_SYM "!="
+#define FINDER_GT_SYM ">"
+#define FINDER_GE_SYM ">="
+#define FINDER_LT_SYM "<"
+#define FINDER_LE_SYM "<="
+#define FILE_CHUNK_SIZE (128 * MEGABYTE_CONVERSION) // 128MB
+#define FILE_CHUNK_NUM_CHECKS (5)
+#define FILE_CHUNK_LENGTH 8
+#define UUID_STRING_SIZE 36
+#define MAXIMUM_PATH_LENGTH 2048 // 2KB
+#define TMTIME_MASK (1 << 16)
+#define DEFAULT_NUM_WORKER_THREADS 4
+#define MIN_NUM_WORKER_THREADS 1
+#define XATTR_FILE_SIZE XATTR_RADOSFS_PREFIX "file-size"
+#define XATTR_FILE_SIZE_LENGTH 16
+#define FILE_IDLE_LOCK_TIMEOUT 0.2 // seconds
+#define FILE_OPS_IDLE_CHECKER_SLEEP 100 // milliseconds
+#define DEFAULT_FILE_INLINE_BUFFER_SIZE (4 * 1024) // bytes
+#define MAX_FILE_INLINE_BUFFER_SIZE (128 * 1024) // bytes
+#define XATTR_FILE_INLINE_BUFFER_SIZE "inline"
+#define XATTR_FILE_INLINE_BUFFER XATTR_RADOSFS_PREFIX "inline."
+#define XATTR_FILE_INLINE_BUFFER_HEADER_SIZE 64 // bytes
+#define QUOTA_OBJ_PREFIX "quota."
+#define XATTR_QUOTA_OBJECT XATTR_RADOSFS_PREFIX "quota-obj"
+#define XATTR_QUOTA_SIZE_PREFIX XATTR_RADOSFS_PREFIX "quota.size."
+#define XATTR_QUOTA_MAX_SIZE XATTR_QUOTA_SIZE_PREFIX "max"
+#define XATTR_QUOTA_CURRENT_SIZE XATTR_QUOTA_SIZE_PREFIX "current"
+#define XATTR_QUOTA_MAX_SIZE_USER_PREFIX XATTR_QUOTA_MAX_SIZE ".user."
+#define XATTR_QUOTA_MAX_SIZE_GROUP_PREFIX XATTR_QUOTA_MAX_SIZE ".group."
+#define XATTR_QUOTA_CURRENT_SIZE_USER_PREFIX XATTR_QUOTA_CURRENT_SIZE ".user."
+#define XATTR_QUOTA_CURRENT_SIZE_GROUP_PREFIX XATTR_QUOTA_CURRENT_SIZE ".group."
+#define XATTR_IN_VALUE_SEPARATOR '|'
+
+#endif /* __RADOS_FS_DEFINES_HH__ */

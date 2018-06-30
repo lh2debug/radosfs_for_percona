@@ -1,0 +1,113 @@
+==============================================
+libradosfs - A filesystem library based in RADOS
+==============================================
+
+libradosfs is a complete client-side implementation of filesystem-like
+functionality based on the RADOS object store (Ceph).
+libradosfs was designed according to the requirements of the CERN Data Storage
+Services group in terms of scalability and flexibility: it provides a scale-out
+namespace and pseudo-hierarchical storage view with optimized directory and file
+access (no strict POSIX semantics), parallel metadata queries, modification time
+propagation, file striping and other features.
+
+libradosfs should not be confused with CephFS. CephFS is a high-performance
+POSIX-compliant filesystem implementation built on top of RADOS and supported by
+Inktank/Redhat.
+
+libradosfs is published under the terms of the LGPLv3 license:
+  http://www.gnu.org/licenses/lgpl-3.0.html
+
+
+Usage
+======
+
+Here is a quick example of how to use libradosfs (it might also be a good idea to
+take a look at the unit tests for further examples):
+
+  #include <libradosfs.hh>
+
+  int ret;
+
+  // Initialize libradosfs
+  radosfs::Filesystem fs;
+  ret = fs.init("someusername", "/path/to/conf/ceph.conf");
+
+  if (ret != 0)
+    return ret;
+
+  // Add pools for prefixes
+  fs.addDataPool("data-pool", "/");
+  fs.addMetadataPool("mtd-pool", "/");
+
+  // Create a directory
+  radosfs::Dir dir(&fs, "/users");
+  ret = dir.create();
+
+  if (ret != 0)
+    return ret;
+
+  // Create a directory for a user with UID and GID = 1000
+  radosfs::Dir userdir(&fs, "/users/joe");
+  ret = userdir.create(S_IRWXU, , false, 1000, 1000);
+
+  if (ret != 0)
+    return ret;
+
+  // Change the current UID and GID to the user mentioned above
+  // (further operations will be done under these ids)
+  radosFs.setIds(1000, 1000);
+
+  // Create a file as user 1000
+  radosfs::File file(&radosFs, "/userdir/myfile");
+  ret = file.create();
+
+  if (ret != 0)
+    return ret;
+
+
+Tools
+======
+
+libradosfs comes with a libradosfs-fsck tool for checking the filesystem for
+issues and possibly correct them.
+
+Here is how to use it:
+
+  $ libradosfs-fsck --conf=CLUSTER_CONF /:data-pool:mtd-pool --check-dirs=/users -R
+
+  Check the directory "/users" recursively in the cluster configured by
+  CLUSTER_CONF with the data pool "data-pool" and metadata pool "mtd-pool" set
+  for objects with the prefix "/" (all files and directories)
+
+  $ libradosfs-fsck --conf=CLUSTER_CONF /:data-pool:mtd-pool --check-paths=/users/joe/file1,/trash/
+
+  Simply check the file "/users/joe/file1" and the directory "/trash/" (does not
+  check its entries) using the cluster and pools configured as in the previous
+  example.
+
+  $ libradosfs-fsck --conf=PATH_TO_CLUSTER_CONF /:data-pool:mtd-pool --check-dirs=/ -R --fix
+
+  Checks all files and directories recursively in the filesystem. When a fixable
+  issue is found, it will be fixed. Currently, the only fixable issues are
+  broken links (to inodes, in the logical path objects) and broken back links
+  (in inodes, to their logical path objects).
+
+  $ libradosfs-fsck --conf=PATH_TO_CLUSTER_CONF /:data-pool:mtd-pool --check-inodes --fix
+
+  Checks all the inode objects in the configured pools ("data-pool" and
+  "mtd-pool") and attempts to fix the issues found. As mentioned before, the
+  only fixable issues are broken links in both directions.
+
+  $ libradosfs-fsck --conf=PATH_TO_CLUSTER_CONF --check-inodes=data-pool-2
+
+  Checks all the inode objects in the given pool ("data-pool"). In this case,
+  since there are no pools configured, the check will be less thorough than
+  in the previous example.
+
+  Whenever the --fix option is used, the --dry option can also be included so it
+  only reports what would have been fixed, without really doing it.
+
+  Using the --verbose option (or -v) will show all the issues found and not only
+  a summary. If used together with the fix option, it will show what was fixed
+  and how. If the dry run option is also used, it will show what would be done
+  for each fix attempt.

@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/data/jameshli/radosfs-master/src/hash64.c
+stdio.h
+-
+stddef.h
+-
+stdlib.h
+-
+hash64.h
+/data/jameshli/radosfs-master/src/hash64.h
+
+/data/jameshli/radosfs-master/src/hash64.h
+

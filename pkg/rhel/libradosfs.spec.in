@@ -1,0 +1,96 @@
+%define _unpackaged_files_terminate_build 0
+Name:		libradosfs
+Version:	__VERSION_MAJOR__.__VERSION_MINOR__.__VERSION_PATCH__
+Release:	__RELEASE__
+Summary:	A file system library based in librados
+Prefix:         /usr
+Group:		Applications/File
+License:	GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+Source:        %{name}-%{version}-%{release}.tar.gz
+BuildRoot:     %{_tmppath}/%{name}-root
+
+BuildRequires: cmake >= 2.6
+BuildRequires: librados2 ceph-devel libuuid-devel boost-devel
+
+%if %{?_EXTRA_REQUIRES:1}%{!?_EXTRA_REQUIRES:0}
+BuildRequires: %{_EXTRA_REQUIRES}
+Requires:      %{_EXTRA_REQUIRES}
+%endif
+
+Requires:      librados2 libuuid
+
+%description
+A file system library based in librados
+
+#-------------------------------------------------------------------------------
+# devel
+#------------------------------------------------------------------------------
+%package devel
+Summary: Development files for libradosfs
+Group: Development/Libraries
+Requires: %{name}%{?_isa} = %{version}-%{release}
+
+%description devel
+This package contains the header files for libradosfs.
+
+#-------------------------------------------------------------------------------
+# tools
+#------------------------------------------------------------------------------
+%package tools
+Summary: Tools for libradosfs
+Group: Applications/File
+Requires: %{name}%{?_isa} = %{version}-%{release}
+
+%description tools
+This package contains the fsck utility for libradosfs.
+
+%prep
+%setup -n %{name}-%{version}-%{release}
+
+%build
+test -e $RPM_BUILD_ROOT && rm -r $RPM_BUILD_ROOT
+%if 0%{?rhel} && 0%{?rhel} < 6
+export CC=/usr/bin/gcc44 CXX=/usr/bin/g++44
+%endif
+
+mkdir -p build
+cd build
+
+%if %{?_BOOST_ROOT:1}%{!?_BOOST_ROOT:0}
+export BOOST_ROOT=%{_BOOST_ROOT} Boost_NO_SYSTEM_PATHS=ON
+%endif
+
+cmake ../ -DRELEASE=%{release} -DCMAKE_BUILD_TYPE=RelWithDebInfo
+%{__make} %{_smp_mflags}
+
+%install
+cd build
+%{__make} install DESTDIR=$RPM_BUILD_ROOT
+echo "Installed!"
+
+%post
+/sbin/ldconfig
+
+%postun
+/sbin/ldconfig
+
+%clean
+rm -rf $RPM_BUILD_ROOT
+
+%files
+%defattr(-,root,root,-)
+%{_libdir}/libradosfs.so
+
+%files devel
+%defattr(-,root,root,-)
+%{_includedir}/libradosfs.hh
+%{_includedir}/radosfs/
+
+
+%files tools
+%defattr(-,root,root,-)
+%{_sbindir}/libradosfs-fsck
+
+
+
